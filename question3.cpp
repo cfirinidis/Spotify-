@@ -3,42 +3,44 @@
 #include <array>
 using namespace std;
 
-// Returns the count of ways we can
-// sum S[0...m-1] coins to get sum n
-int count( int S[], int m, int n )
-{cout<<"n "<<n<<" m-> "<<m<<" S[m-1] "<<S[m-1]<<endl;
+// Returns the count of ways we can add coins to achieve a  given value
+int changePossibilities( int coins[], int nCoins, int totVal ){
+//{cout<<"n "<<n<<" m-> "<<m<<" S[m-1] "<<S[m-1]<<endl;
 
-    // If n is 0 then there is 1 solution
-    // (do not include any coin)
-    if (n == 0)
+
+    if (totVal == 0)// if we have exact change
         return 1;
 
-    // If n is less than 0 then no
-    // solution exists
-    if (n < 0)
+    if ( totVal < 0)//if we have more than the desired amount
         return 0;
 
-    // If there are no coins and n
-    // is greater than 0, then no
-    // solution exist
-    if (m <=0 && n >= 1)
+    if (nCoins <=0 && totVal >= 1)//if we have no more coin variations but have run out of options
         return 0;
 
-    // count is sum of solutions (i)
-    // including S[m-1] (ii) excluding S[m-1]
-
-    return count( S, m - 1, n ) + count( S, m, n-S[m-1] );
+    return changePossibilities( coins, nCoins - 1, totVal ) + changePossibilities( coins, nCoins, totVal-coins[nCoins-1] );
 }
 
 // Driver program to test above function
 int main()
 {
-   // int i, j;
-    int arr[] = {2, 3, 5};
-    //int conz = arr.size();
-    int m = sizeof(arr)/sizeof(arr[0]);
-   // cout<<"m-> "<<m<<" "<<sizeof(arr)<<" "<<sizeof(arr[0])<<"conz "<<conz<<endl;
-    printf("%d ", count(arr, m, 7));
-    getchar();
+int nCoins;
+cout<<"Please enter the number of coins you have: "<<endl;
+cin>>nCoins;
+
+int coins[nCoins];
+int x;
+cout<<"Enter the value of each coin : "<<endl;
+for(int i = 0; i<nCoins; i++){
+    cin>>x;
+    coins[i]= x;
+}
+int totalVal;
+cout<<"Enter the total amount you're looking for :"<<endl;
+cin>>totalVal;
+
+
+cout<<"The total number of ways to get that value with those coins is : "<<changePossibilities(coins, nCoins, totalVal)<<endl;
+
+
     return 0;
 }
